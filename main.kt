@@ -1,3 +1,6 @@
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
+
 open class SmartDevice (val name: String , val category: String) {
     
     var deviceStatus = "online"
@@ -28,19 +31,10 @@ class SmartTvDevice(deviceName: String, deviceCategory: String) :
     
     override var deviceType = "Smart TV"
 
-	private var speakerVolume = 25
-        set(value) {
-            if (value in 0..100) {
-                field = value
-            }
-        }
+    private var speakerVolume by RangeRegulator(initialValue = 25, minValue = 0, maxValue = 100)
+
+    private var channelNumber by RangeRegulator(initialValue = 1, minValue = 0, maxValue = 200)
     
-    private var channelNumber = 1
-        set(value) {
-            if (value in 0..200) {
-                field = value
-            }
-    	}
     
     override fun turnOn() {
         deviceStatus = "on"
@@ -72,12 +66,7 @@ class SmartLightDevice(deviceName: String, deviceCategory: String) :
 
     override var deviceType = "Smart Light"
 	
-	private var brightnessLevel = 0
-        set(value) {
-            if (value in 0..100) {
-                field = value
-            }
-        }
+	private var brightnessLevel by RangeRegulator(initialValue = 2, minValue = 0, maxValue = 100)
         
     fun increaseBrightness() {
         brightnessLevel++
@@ -142,6 +131,26 @@ class SmartHome(
         turnOffTv()
         turnOffLight()
     }
+}
+
+class RangeRegulator(
+    initialValue: Int,
+    private val minValue: Int,
+    private val maxValue: Int
+) : ReadWriteProperty<Any?, Int> {
+
+    var fieldData = initialValue
+
+    override fun getValue(thisRef: Any?, property: KProperty<*>): Int {
+        return fieldData
+    }
+
+    override fun setValue(thisRef: Any?, property: KProperty<*>, value: Int) {
+        if (value in minValue..maxValue) {
+            fieldData = value
+        }
+    }
+
 }
 
 fun main() {
