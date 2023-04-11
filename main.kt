@@ -37,6 +37,19 @@ class SmartTvDevice(deviceName: String, deviceCategory: String) :
             }
     	}
     
+    override fun turnOn() {
+        deviceStatus = "on"
+        println(
+            "$name is turned on. Speaker volume is set to $speakerVolume and channel number is " +
+                "set to $channelNumber."
+        )
+    }
+
+    override fun turnOff() {
+        deviceStatus = "off"
+        println("$name turned off")
+    }
+
 	fun increaseSpeakerVolume() {
         speakerVolume++
         println("Speaker volume increased to $speakerVolume.")
@@ -59,7 +72,7 @@ class SmartLightDevice(deviceName: String, deviceCategory: String) :
             }
         }
         
-    fun increaseBrigthtness() {
+    fun increaseBrightness() {
         brightnessLevel++
         println("Brightness increased to $brightnessLevel")
     }
@@ -67,7 +80,7 @@ class SmartLightDevice(deviceName: String, deviceCategory: String) :
     override fun turnOn() {
         deviceStatus = "on"
         brightnessLevel = 2
-        println("$name turned on. The brigthness level is $brigthnessLevel")
+        println("$name turned on. The brightness level is $brightnessLevel")
     }
 
     override fun turnOff() {
@@ -107,7 +120,7 @@ class SmartHome(
     }
 
     fun increaseLightBrigthness() {
-        smartLightDevice.increaseBrigthtness()
+        smartLightDevice.increaseBrightness()
     }
 
     fun turnOffAllDevices() {
@@ -117,5 +130,16 @@ class SmartHome(
 }
 
 fun main() {
-    
+    var myTv = SmartTvDevice("Samsung TV", "Entertainment")
+    var myLamp = SmartLightDevice("Nexus Light", "Reading")
+
+    myTv.turnOn()
+    myLamp.turnOn()
+
+    myTv.increaseSpeakerVolume()
+    myLamp.increaseBrightness()
+
+
+    myLamp.turnOff()
+    myTv.turnOff()
 }
